@@ -24,6 +24,11 @@ class Items(Resource):
 
 
 class Item(Resource):
+    parser = reqparse.RequestParser()
+    parser.add_argument('price',
+                        type=float,
+                        required=True,
+                        help='This field cannot be empty')
     @jwt_required()
     def get(self, name):
         item = next(filter(lambda x:x['name'] == name, items), None)
@@ -32,7 +37,8 @@ class Item(Resource):
     def post(self, name):
         if next(filter(lambda x:x['name'] == name, items), None):
             return "Item {} already exits".format(name), 400
-        item_price = request.get_json(silent=True)
+        # parsing to the json payload with the parse args as defined class Item RequestParser
+        item_price = Item.parser.parse_args()
 
         item = {'name': name, 'price': item_price['price']}
         items.append(item)
@@ -49,14 +55,9 @@ class Item(Resource):
         return {'message': "item deleted"}, 200
 
     def put(self, name):
-        parser = reqparse.RequestParser()
-        parser.add_argument('price',
-                            type=float,
-                            required=True,
-                            help='This field cannot be empty')
+        # parsing to the json payload with the parse args as defined class Item RequestParser
+        req_price = Item.parser.parse_args()
         item = next(filter(lambda x: x['name'] == name, items), None)
-        # parsing to the json payload with the parse args as defined above
-        req_price = parser.parse_args()
         if item is None:
             item = {'name': name, 'price': req_price['price']}
             items.append(item)
