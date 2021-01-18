@@ -9,11 +9,11 @@ node_address = str(uuid4()).replace('-', '')
 
 stores = [
     {
-        'name': 'my_new_store',
-        'items': [
+        "name": "my_new_store",
+        "items": [
             {
-                'item_name': 'the name of the item',
-                'price': 100
+                "item_name": "the name of the item",
+                "price": 100
             }
         ]
     }
@@ -34,7 +34,6 @@ def get_all_stores():
     #     names.append(el['name'])
     return jsonify({'stores': stores}), 200
 
-#
 
 # Get the name of a specific store
 @app.route('/store/<string:name>', methods=['GET'])   # 127.0.0.1:5000/store/store_name
