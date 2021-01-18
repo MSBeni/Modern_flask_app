@@ -3,6 +3,18 @@ from flask import Flask
 app = Flask(__name__)
 
 
+stores = [
+    {
+        'name': 'my_new_store',
+        'items': [
+            {
+                'item_name': 'the name of the item',
+                'price': 100
+            }
+        ]
+    }
+]
+
 # Create a store
 @app.route('/store', methods=['POST'])
 def create_store():
