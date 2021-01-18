@@ -48,7 +48,6 @@ class Item(Resource):
         items = list(filter(lambda x: x['name'] != name, items))
         return {'message': "item deleted"}, 200
 
-    @jwt_required()
     def put(self, name):
         parser = reqparse.RequestParser()
         parser.add_argument('price',
@@ -56,7 +55,8 @@ class Item(Resource):
                             required=True,
                             help='This field cannot be empty')
         item = next(filter(lambda x: x['name'] == name, items), None)
-        req_price = request.get_json(silent=True)
+        # parsing to the json payload with the parse args as defined above
+        req_price = parser.parse_args()
         if item is None:
             item = {'name': name, 'price': req_price['price']}
             items.append(item)
