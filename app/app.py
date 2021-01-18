@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from uuid import uuid4
 
 app = Flask(__name__)
@@ -21,9 +21,21 @@ stores = [
 
 
 # Create a store
+@app.route('/', methods=['GET'])
+def hello_mng():
+    return "Hello Manager -- Check the /store path"
+
+
+# Create a store
 @app.route('/store', methods=['POST'])
 def create_store():
-    pass
+    new_store = request.get_json()
+    posted_data = {
+        'name': new_store['name'],
+        'items': []
+    }
+    stores.append(posted_data)
+    return jsonify(posted_data)
 
 
 # Get the name of all stores
@@ -38,7 +50,10 @@ def get_all_stores():
 # Get the name of a specific store
 @app.route('/store/<string:name>', methods=['GET'])   # 127.0.0.1:5000/store/store_name
 def get_store(name):
-    pass
+    for store in stores:
+        if store["name"] == name:
+            return jsonify({"store": store})
+    return "No such a Store is available"
 
 
 # Get the name of a specific store
