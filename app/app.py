@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from uuid import uuid4
 
 app = Flask(__name__)
@@ -23,7 +23,7 @@ stores = [
 # Create a store
 @app.route('/', methods=['GET'])
 def hello_mng():
-    return "Hello Manager -- Check the /store path"
+    return render_template('index.html')
 
 
 # Create a store
