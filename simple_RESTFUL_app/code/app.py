@@ -1,4 +1,5 @@
 from flask import Flask, request
+from uuid import uuid4
 from flask_restful import Api, Resource
 from flask_jwt import JWT, jwt_required
 from simple_RESTFUL_app.code.security import authenticate, identity
