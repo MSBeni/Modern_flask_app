@@ -40,12 +40,13 @@ class Item(Resource):
 
     @jwt_required()
     def delete(self, name):
+        global items
         if next(filter(lambda x: x['name'] == name, items), None) is None:
             return "There is no item named {} to be deleted".format(name), 400
-        global items
-        item = next(filter(lambda x: x['name'] == name, items), None)
-        items.remove(item)
-        return {'items': items}, 200
+        # item = next(filter(lambda x: x['name'] == name, items), None)
+        # items.remove(item)
+        items = list(filter(lambda x: x['name'] != name, items))
+        return {'message': "item deleted"}, 200
 
 
 api.add_resource(Item, '/item/<string:name>')
