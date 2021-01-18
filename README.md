@@ -10,4 +10,3 @@ and install Json Web Token (JWT) library for authentication:
 ```bash
 $ pip install Flask-JWT
 ```
- 
