@@ -1,6 +1,6 @@
 from flask import Flask, request
 from uuid import uuid4
-from flask_restful import Api, Resource
+from flask_restful import Api, Resource, reqparse
 from flask_jwt import JWT, jwt_required
 from simple_RESTFUL_app.code.security import authenticate, identity
 
@@ -50,6 +50,11 @@ class Item(Resource):
 
     @jwt_required()
     def put(self, name):
+        parser = reqparse.RequestParser()
+        parser.add_argument('price',
+                            type=float,
+                            required=True,
+                            help='This field cannot be empty')
         item = next(filter(lambda x: x['name'] == name, items), None)
         req_price = request.get_json(silent=True)
         if item is None:
