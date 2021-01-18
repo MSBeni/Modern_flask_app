@@ -41,9 +41,6 @@ def create_store():
 # Get the name of all stores
 @app.route('/store', methods=['GET'])
 def get_all_stores():
-    # names = []
-    # for el in stores:
-    #     names.append(el['name'])
     return jsonify({'stores': stores}), 200
 
 
@@ -56,7 +53,7 @@ def get_store(name):
     return "No such a Store is available"
 
 
-# Get the name of a specific store
+# Get the name of a specific item in a specific store
 @app.route('/store/<string:name>/item', methods=['POST'])   # 127.0.0.1:5000/store/store_name/item
 def create_item_in_store(name):
     pass
