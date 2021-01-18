@@ -48,6 +48,7 @@ class Item(Resource):
         items = list(filter(lambda x: x['name'] != name, items))
         return {'message': "item deleted"}, 200
 
+    @jwt_required()
     def put(self, name):
         item = next(filter(lambda x: x['name'] == name, items), None)
         req_price = request.get_json(silent=True)
