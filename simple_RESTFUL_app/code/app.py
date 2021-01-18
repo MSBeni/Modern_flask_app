@@ -38,6 +38,15 @@ class Item(Resource):
         items.append(item)
         return {'Added item': item}, 201
 
+    @jwt_required()
+    def delete(self, name):
+        if next(filter(lambda x: x['name'] == name, items), None) is None:
+            return "There is no item named {} to be deleted".format(name), 400
+        global items
+        item = next(filter(lambda x: x['name'] == name, items), None)
+        items.remove(item)
+        return {'items': items}, 200
+
 
 api.add_resource(Item, '/item/<string:name>')
 api.add_resource(Items, '/items')
