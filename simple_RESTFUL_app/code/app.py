@@ -48,6 +48,18 @@ class Item(Resource):
         items = list(filter(lambda x: x['name'] != name, items))
         return {'message': "item deleted"}, 200
 
+    def put(self, name):
+        global items
+        if next(filter(lambda x: x['name'] == name, items), None) is None:
+            return "There is no item named {} to be updated".format(name), 400
+
+        req_price = request.get_json(silent=True)
+        item = next(filter(lambda x: x['name'] == name, items), None)
+        item['price'] = req_price['price']
+        items = list(filter(lambda x: x['name'] != name, items))
+        items.append(item)
+        return {'message': "item updated"}, 200
+
 
 api.add_resource(Item, '/item/<string:name>')
 api.add_resource(Items, '/items')
