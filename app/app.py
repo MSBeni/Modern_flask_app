@@ -1,7 +1,11 @@
-from flask import Flask
+from flask import Flask, jsonify
+from uuid import uuid4
 
 app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
+# Create an add address for the node 5000
+node_address = str(uuid4()).replace('-', '')
 
 stores = [
     {
@@ -15,6 +19,7 @@ stores = [
     }
 ]
 
+
 # Create a store
 @app.route('/store', methods=['POST'])
 def create_store():
@@ -24,8 +29,12 @@ def create_store():
 # Get the name of all stores
 @app.route('/store', methods=['GET'])
 def get_all_stores():
-    pass
+    # names = []
+    # for el in stores:
+    #     names.append(el['name'])
+    return jsonify({'stores': stores}), 200
 
+#
 
 # Get the name of a specific store
 @app.route('/store/<string:name>', methods=['GET'])   # 127.0.0.1:5000/store/store_name
