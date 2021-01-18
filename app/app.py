@@ -53,16 +53,30 @@ def get_store(name):
     return "No such a Store is available"
 
 
-# Get the name of a specific item in a specific store
+# Post the name of a specific item to a specific store
 @app.route('/store/<string:name>/item', methods=['POST'])   # 127.0.0.1:5000/store/store_name/item
 def create_item_in_store(name):
-    pass
+    req_item = request.get_json()
+    for store in stores:
+        if store["name"] == name:
+            new_item = {
+                'item_name': req_item["name"],
+                'price': req_item["price"]
+            }
+            store["items"].append(new_item)
+        return jsonify(store)
+
+    return jsonify({'message': 'store not found'})
 
 
-# Get all the items in a specific store
+# Get the name of a specific item to a specific store
 @app.route('/store/<string:name>/item', methods=['GET'])   # 127.0.0.1:5000/store/store_name/item
 def get_all_items_in_store(name):
-    pass
+    for store in stores:
+        if store["name"] == name:
+            return jsonify({"items": store["items"]})
+
+    return "No data to show -- there is not such  a store"
 
 
 if __name__ == '__main__':
