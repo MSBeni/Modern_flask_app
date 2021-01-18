@@ -6,11 +6,6 @@ api = Api(app)
 
 items = []
 
-items_2 = [{'name': 'book', 'price': 12}, {'name': 'piano', 'price': 20}]
-x = filter(lambda x: x['name'] == 'book', items_2)
-print(*x)
-
-
 class Items(Resource):
     def get(self):
         return {'items': items}
@@ -22,6 +17,8 @@ class Item(Resource):
         return {'item': item}, 200 if item is not None else 404
 
     def post(self, name):
+        if next(filter(lambda x:x['name'] == name, items), None):
+            return "Item {} already exits".format(name), 400
         item_price = request.get_json(silent=True)
 
         item = {'name': name, 'price': item_price['price']}
