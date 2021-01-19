@@ -6,7 +6,9 @@ cur = connection.cursor()
 
 cur.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username text, password text)")
 
-# cur.execute("INSERT INTO users VALUES (?,?)", ('user1', '12345'))
+cur.execute("CREATE TABLE IF NOT EXISTS items (name text, price real)")
+
+cur.execute("INSERT INTO items VALUES (?,?)", ('test', 10.99))
 #
 # users = [
 #     ('user2', '123'),
@@ -14,10 +16,10 @@ cur.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username 
 # ]
 # cur.executemany("INSERT INTO users VALUES (?,?)", users)
 #
-# all_users = cur.execute("SELECT * FROM users")
-#
-# for row in all_users:
-#     print(row)
+all_items = cur.execute("SELECT * FROM items")
+
+for row in all_items:
+    print(row)
 
 connection.commit()
 

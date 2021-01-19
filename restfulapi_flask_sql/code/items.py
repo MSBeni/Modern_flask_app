@@ -19,7 +19,7 @@ class Item(Resource):
     def get(self, name):
         connection = sqlite3.connect('data.db')
         cur = connection.cursor()
-        data = cur.execute("SELECT * FROM users WHERE users.username=?", (name,))
+        data = cur.execute("SELECT * FROM items WHERE items.name=?", (name,))
         row = data.fetchone()
         connection.close()
         if row:
