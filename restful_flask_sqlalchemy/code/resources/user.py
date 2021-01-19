@@ -1,5 +1,6 @@
 import sqlite3
 from flask_restful import Resource, reqparse
+from restful_flask_sqlalchemy.code.models.user import UserModel
 
 
 class UserRegister(Resource):
@@ -17,7 +18,7 @@ class UserRegister(Resource):
     def post(self):
         reg_credential = UserRegister.parser.parse_args()
 
-        if User.get_user_by_username(reg_credential['username']):
+        if UserModel.get_user_by_username(reg_credential['username']):
             return {"message": "This Username already exists, please try another username"}, 400
         connection = sqlite3.connect('data.db')
         cur = connection.cursor()
