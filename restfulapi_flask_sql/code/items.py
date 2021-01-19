@@ -1,3 +1,4 @@
+import sqlite3
 from flask_jwt import jwt_required
 from flask_restful import Resource, reqparse
 
@@ -16,8 +17,12 @@ class Item(Resource):
 
     @jwt_required()
     def get(self, name):
-        item = next(filter(lambda x:x['name'] == name, items), None)
-        return {'item': item}, 200 if item is not None else 404
+        connection = sqlite3.connect('data.db')
+        cur = connection.cursor()
+        data = cur.execute("SELECT * FROM users WHERE users.username=?", (name,))
+        connection.close()
+        return data
+
 
     def post(self, name):
         if next(filter(lambda x:x['name'] == name, items), None):
