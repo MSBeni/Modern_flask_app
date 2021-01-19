@@ -84,9 +84,16 @@ class Item(Resource):
         # parsing to the json payload with the parse args as defined class Item RequestParser
         req_price = Item.parser.parse_args()
         item = self.get_item_by_name(name)
+        updeted_item = {'name': name, 'price': req_price['price']}
         if item is None:
-            self.insert_into_table(name, req_price['price'])
+            try:
+                self.insert_into_table(name, req_price['price'])
+            except:
+                return {"message": "Failed to insert into table ..."}, 500  # internal server error
         else:
-            self.update_table(req_price['price'], name)
+            try:
+                self.update_table(req_price['price'], name)
+            except:
+                return {"message": "Failed to update the table ..."}, 500  # internal server error
 
-        return {"message": "Item Added or update"}, 201
+        return updeted_item, 201
