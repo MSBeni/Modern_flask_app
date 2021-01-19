@@ -26,7 +26,7 @@ class Item(Resource):
     def get(self, name):
         item = ItemModel.get_item_by_name(name)
         if item:
-            return item
+            return item.json()
 
         return {"message": "item not found ..."}, 404
 
@@ -35,9 +35,9 @@ class Item(Resource):
             return "Item {} already exits".format(name), 400   # something goes wrong with the request
         # parsing to the json payload with the parse args as defined class Item RequestParser
         item_price = Item.parser.parse_args()
-        item = {'name': name, 'price': item_price['price']}
+        item = ItemModel(name, item_price['price'])
         try:
-            ItemModel.insert_into_table(name, item_price['price'])
+            item.insert_into_table()
         except:
             return {"message": "Failed to insert into table ..."}, 500  # internal server error
 
@@ -58,7 +58,7 @@ class Item(Resource):
         # parsing to the json payload with the parse args as defined class Item RequestParser
         req_price = Item.parser.parse_args()
         item = ItemModel.get_item_by_name(name)
-        updeted_item = {'name': name, 'price': req_price['price']}
+        updeted_item = ItemModel(name, req_price['price'])
         if item is None:
             try:
                 ItemModel.insert_into_table(name, req_price['price'])
