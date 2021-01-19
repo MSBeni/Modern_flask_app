@@ -30,6 +30,15 @@ class Item(Resource):
         if row:
             return {'item': {"name": row[0], "price": row[1]}}
 
+    @classmethod
+    def insert_into_table(cls, name, price):
+
+        connection = sqlite3.connect('data.db')
+        cur = connection.cursor()
+        cur.execute("INSERT INTO items VALUES (?,?)", (name, price))
+        connection.commit()
+        connection.close()
+
     @jwt_required()
     def get(self, name):
         item = self.get_item_by_name(name)
@@ -43,11 +52,7 @@ class Item(Resource):
             return "Item {} already exits".format(name), 400
         # parsing to the json payload with the parse args as defined class Item RequestParser
         item_price = Item.parser.parse_args()
-        connection = sqlite3.connect('data.db')
-        cur = connection.cursor()
-        cur.execute("INSERT INTO items VALUES (?,?)", (name, item_price['price']))
-        connection.commit()
-        connection.close()
+        self.insert_into_table(name, item_price['price'])
         item = {'name': name, 'price': item_price['price']}
 
         return {'Added item': item}, 201
