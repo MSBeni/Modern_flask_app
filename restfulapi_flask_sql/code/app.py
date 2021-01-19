@@ -2,7 +2,8 @@ from flask import Flask, request
 from uuid import uuid4
 from flask_restful import Api, Resource, reqparse
 from flask_jwt import JWT, jwt_required
-from Restfulapi_flask_sql.code.security import authenticate, identity
+from restfulapi_flask_sql.code.security import authenticate, identity
+from restfulapi_flask_sql.code.user import UserRegister
 
 app = Flask(__name__)
 
@@ -29,6 +30,7 @@ class Item(Resource):
                         type=float,
                         required=True,
                         help='This field cannot be empty')
+
     @jwt_required()
     def get(self, name):
         item = next(filter(lambda x:x['name'] == name, items), None)
@@ -68,6 +70,7 @@ class Item(Resource):
 
 api.add_resource(Item, '/item/<string:name>')
 api.add_resource(Items, '/items')
+api.add_resource(UserRegister, '/signup')
 
 if __name__ == '__main__':
     app.run('127.0.0.1', port=5000, debug=True)
