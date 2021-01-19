@@ -20,9 +20,12 @@ class Item(Resource):
         connection = sqlite3.connect('data.db')
         cur = connection.cursor()
         data = cur.execute("SELECT * FROM users WHERE users.username=?", (name,))
+        row = data.fetchone()
         connection.close()
-        return data
+        if row:
+            return {'itme': {"name": row['name'], "price": row['price']}}
 
+        return {"message": "item not found ..."}, 404
 
     def post(self, name):
         if next(filter(lambda x:x['name'] == name, items), None):
