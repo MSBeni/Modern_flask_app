@@ -10,3 +10,7 @@ and install Json Web Token (JWT) library for authentication:
 ```bash
 $ pip install Flask-JWT
 ```
+ and in order to work with SQLAlchemy, you should install it:
+ ```bash
+$ pip install Flask-SQLAlchemy
+```
