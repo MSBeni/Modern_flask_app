@@ -71,10 +71,9 @@ class Item(Resource):
         cur = connection.cursor()
         if item is None:
             cur.execute("INSERT INTO items VALUES (?,?)", (name, req_price['price']))
-            return {"message": "Item Added"}, 201
         else:
             cur.execute("UPDATE items SET price=? WHERE items.name=?", (req_price['price'], name))
 
         connection.commit()
         connection.close()
-        return item
+        return {"message": "Item Added or update"}, 201
