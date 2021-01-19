@@ -39,6 +39,15 @@ class Item(Resource):
         connection.commit()
         connection.close()
 
+    @classmethod
+    def update_table(cls, price, name):
+
+        connection = sqlite3.connect('data.db')
+        cur = connection.cursor()
+        cur.execute("UPDATE items SET price=? WHERE items.name=?", (price, name))
+        connection.commit()
+        connection.close()
+
     @jwt_required()
     def get(self, name):
         item = self.get_item_by_name(name)
@@ -49,11 +58,14 @@ class Item(Resource):
 
     def post(self, name):
         if self.get_item_by_name(name):
-            return "Item {} already exits".format(name), 400
+            return "Item {} already exits".format(name), 400   # something goes wrong with the request
         # parsing to the json payload with the parse args as defined class Item RequestParser
         item_price = Item.parser.parse_args()
-        self.insert_into_table(name, item_price['price'])
         item = {'name': name, 'price': item_price['price']}
+        try:
+            self.insert_into_table(name, item_price['price'])
+        except:
+            return {"message": "Failed to insert into table ..."}, 500  # internal server error
 
         return {'Added item': item}, 201
 
@@ -72,13 +84,9 @@ class Item(Resource):
         # parsing to the json payload with the parse args as defined class Item RequestParser
         req_price = Item.parser.parse_args()
         item = self.get_item_by_name(name)
-        connection = sqlite3.connect('data.db')
-        cur = connection.cursor()
         if item is None:
-            cur.execute("INSERT INTO items VALUES (?,?)", (name, req_price['price']))
+            self.insert_into_table(name, req_price['price'])
         else:
-            cur.execute("UPDATE items SET price=? WHERE items.name=?", (req_price['price'], name))
+            self.update_table(req_price['price'], name)
 
-        connection.commit()
-        connection.close()
         return {"message": "Item Added or update"}, 201
