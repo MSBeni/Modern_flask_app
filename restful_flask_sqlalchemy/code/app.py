@@ -2,9 +2,9 @@ from flask import Flask
 from uuid import uuid4
 from flask_restful import Api
 from flask_jwt import JWT
-from restfulapi_flask_sql.code.security import authenticate, identity
-from restful_flask_sqlalchemy.code.user import UserRegister
-from restful_flask_sqlalchemy.code.items import Items, Item
+from restful_flask_sqlalchemy.code.security import authenticate, identity
+from restful_flask_sqlalchemy.code.resources.user import UserRegister
+from restful_flask_sqlalchemy.code.resources.items import Items, Item
 
 app = Flask(__name__)
 

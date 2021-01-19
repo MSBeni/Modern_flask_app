@@ -1,5 +1,5 @@
 from werkzeug.security import safe_str_cmp
-from restful_flask_sqlalchemy.code.user import User
+from restful_flask_sqlalchemy.code.resources.user import User
 
 
 def authenticate(username, password):
