@@ -41,7 +41,7 @@ class Item(Resource):
         except:
             return {"message": "Failed to insert into table ..."}, 500  # internal server error
 
-        return {'Added item': item}, 201
+        return item.json(), 201
 
     @jwt_required()
     def delete(self, name):
@@ -61,13 +61,13 @@ class Item(Resource):
         updeted_item = ItemModel(name, req_price['price'])
         if item is None:
             try:
-                ItemModel.insert_into_table(name, req_price['price'])
+                updeted_item.insert_into_table()
             except:
                 return {"message": "Failed to insert into table ..."}, 500  # internal server error
         else:
             try:
-                ItemModel.update_table(req_price['price'], name)
+                updeted_item.update_table()
             except:
                 return {"message": "Failed to update the table ..."}, 500  # internal server error
 
-        return updeted_item, 201
+        return updeted_item.json(), 201
